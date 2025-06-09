@@ -41,8 +41,6 @@ async function getCookie()
         for (let cookieString of setCookieHeaders) {
           await cookie.setCookie(cookieString, baseURL);
         }
-
-        console.log(cookie)
     }
     
     catch(error){
@@ -74,6 +72,10 @@ async function userDetail(cookieJar: tough.CookieJar){
     }
 }
 
+// This is for the Authenticated User Detail - Since I don't know the checkcode Algo, so to get that User detail  I am manually enter the field which will result in the user detail
+
+// Note: When the token expire this Method call will fail
+
 async function authUserDetail(){
     let authenticatedUserDetails 
     let htmlData
@@ -82,11 +84,10 @@ async function authUserDetail(){
         const authToken = await axios.get(
             "https://challenge.sunvoy.com/settings/tokens",{
             headers:{
-                cookie:"user_preferences=eyJ0aGVtZS6ImxpZ2h0IiwibGFuZ3VhZ2UiOiJlbiIsInRpbWV6b25lIjoiVVRDIiwibm90aWZpY2F0aW9ucyI6dHJ1ZX0%3D; feature_flags=eyJuZXdEYXNoYm9hcmQiOnRydWUsImJldGFGZWF0dXJlcyI6ZmFsc2UsImFkdmFuY2VkU2V0dGluZ3MiOnRydWUsImV4cGVyaW1lbnRhbFVJIjpmYWxzZX0%3D; tracking_consent=accepted; JSESSIONID=00e03bfe-c13d-41b1-8e09-2fb5e60f4679; _csrf_token=a9708d8c8af45d79b303c51875aad9981c8b7f340673f775fe65a6f3d45d5b12; analytics_id=analytics_fbe96a0c6925beb3e9ad5b2abcb1764e; session_fingerprint=ce6a0892344676afab3121745decf920a6e1102766c0ad7c6abc5eeb7967eaef; device_id=device_14f8b49b1547adabdc038fc2"
+                cookie:"user_preferences=eyJ0aGVtZSI6ImxpZ2h0IiwibGFuZ3VhZ2UiOiJlbiIsInRpbWV6b25lIjoiVVRDIiwibm90aWZpY2F0aW9ucyI6dHJ1ZX0%3D; feature_flags=eyJuZXdEYXNoYm9hcmQiOnRydWUsImJldGFGZWF0dXJlcyI6ZmFsc2UsImFkdmFuY2VkU2V0dGluZ3MiOnRydWUsImV4cGVyaW1lbnRhbFVJIjpmYWxzZX0%3D; tracking_consent=accepted; JSESSIONID=cd17e80a-41ae-429f-bd1c-bb1e9f30a835; _csrf_token=7ec00d066f3b070244bfe3c7c838b6f0f4f778d5792fcd2936b0fad8f8026d21; analytics_id=analytics_72aae12dfc35a17f7527e92c335e3ea0; session_fingerprint=08cb269543354e967c22f511f8c44c67c1d64c6e9f6fbb064425095a309f96f7; device_id=device_7859bff2dfd0412e3235cb09"
             }
         }
         )
-        console.log("Auth token data is : ", authToken.data)
         htmlData = authToken.data;
         value = cheerio.load(htmlData);
 
@@ -98,15 +99,15 @@ async function authUserDetail(){
 
         const bodyData = {
             //access_token:authToken.data.access_token,
-            access_token: "b592ccadc0a70f1f8c73355d78ee2e4db1ef85f28498d1bdb61ed86a3f812a9e",
+            access_token: "206a9cd2b6d75f93e4675ea6522d43339b22cdbfbcc3bc0510934cdc761b5c32",
             apiuser: apiuser,
             language: language,
             openId: openId,
             operateId: operateId,
             //timestamp:Math.floor(Date.now() / 1000),
-            timestamp: 1749386980,
+            timestamp: 1749446926,
             userId: userId,      
-            checkcode: "35FCDDC3D80737E7E59D5AB794BAD80B811CA71E"
+            checkcode: "C890EF8BF05DE01B0F11D5EB181E4D5ADCFA99E2"
           };
 
         const dataString = qs.stringify(bodyData); 
@@ -133,5 +134,5 @@ async function authUserDetail(){
 (async () => {
     await getCookie(); 
     await userDetail(cookie); 
-    //await authUserDetailFromCookie(cookie); 
+    await authUserDetail(); 
 })();
